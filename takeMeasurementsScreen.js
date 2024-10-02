@@ -88,7 +88,6 @@ class MainPage extends Component {
 
         this.BluetoothManager = new BleModule();
 
-        this.glucoseData;
         this.totalCount=0;
         this.currentCommand;
         this.open_pcl_try_counter=1;
@@ -97,6 +96,7 @@ class MainPage extends Component {
         this.firmwareVersion='';
         this.totalCount=0;
         this.isOpenPCL=false;
+        this.glucoseData = [];
     }
     goBack = () => {
         this.props.navigation.goBack();
@@ -363,45 +363,51 @@ class MainPage extends Component {
     
                 case BgmCommand.GET_TOTAL_RECORD_COUNT:
                   let bytes = value.slice(4, value.length - 1);
-                  this.totalCount = this.getTotalCount(bytes.slice(4,6));
-                  this.totalCount=totalCount;
+                  let counts = this.getTotalCount(bytes.slice(4,6));
+                  this.totalCount=counts;
     
-                    if (this.totalCount > 0) {
+                    if (counts > 0) {
                         let cmd_get_one_record=this.getOneRecordCmd();
                         await this.BluetoothManager.write_writeChara(cmd_get_one_record)
                         .then(() => {
                             this.currentCommand = BgmCommand.GET_GLUCOSE_RECORD;
                         });
                     } else {
+                        console.log('disconnecting')
                         this.disconnect(data.peripheral);
                     }
                   break;
     
                 case BgmCommand.GET_GLUCOSE_RECORD:
-                  const tempBytes = value.slice(2, value.length-1);
-                  this.glucoseData = this.glucoseData.concat(Array.from(tempBytes));
-    
-                  if (value[0] !== value[1]) {
-                        console.log('returning xxx');
-                        return;
-                  }
-    
-                  // Process the glucose data
-                  this.parserOneRecord(this.glucoseData.slice(2, this.glucoseData.length-1))
-    
-                  this.glucoseData = [];
-                  this.totalCount -= 1;
-    
-                  if (this.totalCount === 0) {
-                    let cmd_stop_broadcast=[0xB0, 0x36, 0x78, 0x5E];
-                            await this.BluetoothManager.write_writeChara(cmd_stop_broadcast)
-                            .then(() => {
-                                this.currentCommand = BgmCommand.STOP_BROADCAST;
-                                });
-                  } else {
-                    let cmd_get_one_record=this.getOneRecordCmd();
-                    await this.BluetoothManager.write_writeChara(cmd_get_one_record);
-                  }
+                    try{
+                        const tempBytes = value.slice(2, value.length-1);
+                        this.glucoseData = this.glucoseData.concat(tempBytes);
+          
+                        if (value[0] !== value[1]) {
+                              console.log('returning xxx');
+                              return;
+                        }
+          
+                        // Process the glucose data
+                        this.parserOneRecord(this.glucoseData.slice(2, this.glucoseData.length-1))
+          
+                        this.glucoseData = [];
+                        this.totalCount -= 1;
+          
+                        if (this.totalCount === 0) {
+                          let cmd_stop_broadcast=[0xB0, 0x36, 0x78, 0x5E];
+                                  await this.BluetoothManager.write_writeChara(cmd_stop_broadcast)
+                                  .then(() => {
+                                      this.currentCommand = BgmCommand.STOP_BROADCAST;
+                                      });
+                        } else {
+                          let cmd_get_one_record=this.getOneRecordCmd();
+                          await this.BluetoothManager.write_writeChara(cmd_get_one_record);
+                        }
+                    }
+                    catch(err){
+                        console.log('err:',err);
+                    }
                   break;
     
                 default:
@@ -488,6 +494,7 @@ class MainPage extends Component {
       }
 
     parserOneRecord = (data) => {
+        console.log(`parsing data: ${data}`);
         const record = data.slice(2, 16);
         const dataByte = record.slice(0, 6);
 
@@ -568,7 +575,7 @@ class MainPage extends Component {
     //==================================================================================================
     disconnect = async item => {
         try {
-            if (item.id.length > 0) {
+            if (item.id) {
                 this.BluetoothManager.disconnect();
                 item.connected = 'false';
             }
