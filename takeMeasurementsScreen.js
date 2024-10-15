@@ -285,16 +285,7 @@ class MainPage extends Component {
                 this.updateValueListener = this.BluetoothManager.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleUpdateValue);
                 try {
                     this.currentCommand = BgmCommand.WAIT_NOTIFY;
-                    await this.BluetoothManager.startNotification()
-                        .then(() => {
-                            // setIsMonitoring(true);
-                            // alert('aaa');
-                        })
-                        .catch(err => {
-                            // setIsMonitoring(false);
-                            // alert('bbb');
-                        });
-
+                    await this.BluetoothManager.startNotification();
                 }
                 catch (error) {
                     //  console.log(error);
@@ -330,15 +321,8 @@ class MainPage extends Component {
                   break;
 
                 case BgmCommand.OPEN_PCL:
-                    await this.BluetoothManager.stopNotification() // or await this.BluetoothManager.stopNotification()
-                        .then(() => {
-                            // setIsMonitoring(true);
-                            // alert('aaa');
-                        })
-                        .catch(err => {
-                            // setIsMonitoring(false);
-                            // alert('bbb');
-                        });
+                    
+                        
                     let checkPCL=await this.checkIfPCL_Is_Open();
                     if(checkPCL==true)
                     {
@@ -380,6 +364,7 @@ class MainPage extends Component {
                   console.log('totalCount:', counts);
     
                     if (counts > 0) {
+                        await this.BluetoothManager.stopNotification_Chara();
                         let cmd_get_one_record=this.getOneRecordCmd();
                         await this.BluetoothManager.write_writeChara(cmd_get_one_record)
                         .then(() => {

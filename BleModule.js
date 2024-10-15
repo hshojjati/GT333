@@ -245,7 +245,7 @@ export default class BleModule {
               this.nofityCharacteristicUUID[i],
             )
               .then(() => {
-                //  console.log('Notification started');
+                console.log('Notification started');
                // resolve();
               })
               .catch(error => {
@@ -530,7 +530,7 @@ export default class BleModule {
       });
   }
 
-  write_notifyChara() {
+  startNotification_Chara() {
     return new Promise((resolve, reject) => {
       for (let i = 0; i < this.notifyChara.length; i++) {
         setTimeout(async () => {
@@ -540,10 +540,34 @@ export default class BleModule {
               this.notifyChara[i].characteristic
             )
               .then(() => {
+                console.log('notification started');
                 resolve();
               })
               .catch(error => {
-                console.log('write_notifyChara error:', error);
+                console.log('startNotification_Chara error:', error);
+                reject(error);
+              });
+        }, i * 500);
+      }
+      });
+  }
+
+  stopNotification_Chara() {
+    return new Promise((resolve, reject) => {
+      for (let i = 0; i < this.notifyChara.length; i++) {
+        setTimeout(async () => {
+              BleManager.stopNotification(
+              this.peripheralId,
+              this.notifyChara[i].service,
+              this.notifyChara[i].characteristic
+            )
+              .then(() => {
+                console.log('notification stopped');
+                resolve();
+              })
+              .catch(error => {
+                console.log('stopNotification_Chara error:', error);
+                reject(error);
               });
         }, i * 500);
       }

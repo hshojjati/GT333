@@ -1,0 +1,134 @@
+ LOG  Init the module success.
+ LOG  Scan started
+ LOG  startNotification
+ LOG  Notification started
+ LOG  Notification started
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: WAIT_NOTIFY
+ LOG  meterSN: 2236XAA0295
+ LOG  Notification started
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  write_pclChara:  [0]
+ LOG  Notification started
+ LOG  retry PCL Opening for 1 time
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  write_pclChara:  [0]
+ LOG  Notification started
+ LOG  PCL Opened.
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 255, 71, 77, 50, 51, 54, 125]}
+ LOG  hexString of data: 0x01 0x01 0x4F 0xFF 0x47 0x4D 0x32 0x33 0x36 0x7D
+ LOG  currentCommand: OPEN_PCL
+ LOG  write_pclChara:  [0]
+ LOG  PCL Opened.
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: GET_MODEL_NAME
+ LOG  modelName: 2236XAA0295
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 255, 71, 77, 50, 51, 54, 125]}
+ LOG  hexString of data: 0x01 0x01 0x4F 0xFF 0x47 0x4D 0x32 0x33 0x36 0x7D
+ LOG  currentCommand: GET_MODEL_NAME
+ LOG  modelName: OGM236
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 255, 71, 77, 50, 51, 54, 125]}
+ LOG  hexString of data: 0x01 0x01 0x4F 0xFF 0x47 0x4D 0x32 0x33 0x36 0x7D
+ LOG  currentCommand: GET_MODEL_NAME
+ LOG  modelName: OGM236
+ LOG  Notification started
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 254, 65, 48, 48, 51, 33]}   
+ LOG  hexString of data: 0x01 0x01 0x4F 0xFE 0x41 0x30 0x30 0x33 0x21
+ LOG  currentCommand: GET_FIRMWARE_VERSION
+ LOG  firmwareVersion: OA003
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 254, 65, 48, 48, 51, 33]}   
+ LOG  hexString of data: 0x01 0x01 0x4F 0xFE 0x41 0x30 0x30 0x33 0x21
+ LOG  currentCommand: GET_FIRMWARE_VERSION
+ LOG  firmwareVersion: OA003
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 254, 65, 48, 48, 51, 33]}   
+ LOG  hexString of data: 0x01 0x01 0x4F 0xFE 0x41 0x30 0x30 0x33 0x21
+ LOG  currentCommand: GET_FIRMWARE_VERSION
+ LOG  firmwareVersion: OA003
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 255, 71, 77, 50, 51, 54, 125]}
+ LOG  hexString of data: 0x01 0x01 0x4F 0xFF 0x47 0x4D 0x32 0x33 0x36 0x7D
+ LOG  currentCommand: GET_FIRMWARE_VERSION
+ LOG  firmwareVersion: OGM236
+ LOG  Notification started
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: GET_FIRMWARE_VERSION
+ LOG  firmwareVersion: 2236XAA0295
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: GET_FIRMWARE_VERSION
+ LOG  firmwareVersion: 2236XAA0295
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 204, 246, 1, 0, 0, 2, 0, 1, 
+0, 21]}
+ LOG  hexString of data: 0x01 0x01 0x4F 0xCC 0xF6 0x01 0x00 0x00 0x02 0x00 0x01 0x00 0x15
+ LOG  currentCommand: GET_TOTAL_RECORD_COUNT
+ LOG  totalCount: 1
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 254, 65, 48, 48, 51, 33]}   
+ LOG  hexString of data: 0x01 0x01 0x4F 0xFE 0x41 0x30 0x30 0x33 0x21
+ LOG  currentCommand: GET_TOTAL_RECORD_COUNT
+ LOG  totalCount: 1
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 254, 65, 48, 48, 51, 33]}   
+ LOG  hexString of data: 0x01 0x01 0x4F 0xFE 0x41 0x30 0x30 0x33 0x21
+ LOG  currentCommand: GET_TOTAL_RECORD_COUNT
+ LOG  totalCount: 1
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 204, 246, 1, 0, 0, 2, 0, 1, 
+0, 21]}
+ LOG  hexString of data: 0x01 0x01 0x4F 0xCC 0xF6 0x01 0x00 0x00 0x02 0x00 0x01 0x00 0x15
+ LOG  currentCommand: GET_TOTAL_RECORD_COUNT
+ LOG  totalCount: 1
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [1, 1, 79, 254, 65, 48, 48, 51, 33]}   
+ LOG  hexString of data: 0x01 0x01 0x4F 0xFE 0x41 0x30 0x30 0x33 0x21
+ LOG  currentCommand: GET_TOTAL_RECORD_COUNT
+ LOG  totalCount: 1
+ LOG  notification stopped
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: GET_TOTAL_RECORD_COUNT
+ LOG  totalCount: 2
+ LOG  notification stopped
+ LOG  notification stopped
+ LOG  notification stopped
+ LOG  notification stopped
+ LOG  notification stopped
+ LOG  notification stopped
+ LOG  Notification started
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: GET_TOTAL_RECORD_COUNT
+ LOG  totalCount: 2
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: GET_TOTAL_RECORD_COUNT
+ LOG  totalCount: 2
+ LOG  notification stopped
+ LOG  notification stopped
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: GET_TOTAL_RECORD_COUNT
+ LOG  totalCount: 2
+ LOG  notification stopped
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: GET_TOTAL_RECORD_COUNT
+ LOG  totalCount: 2
+ LOG  notification stopped
+ LOG  notification stopped
+ LOG  notification stopped
+ LOG  notification stopped
+ LOG  notification stopped
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: GET_GLUCOSE_RECORD
+ LOG  returning xxx
+ LOG  notification stopped
+ LOG  scanning: false
+ LOG  notification stopped
+ LOG  write_writeChara error: Error writing 0000fee3-0000-1000-8000-00805f9b34fb status=133
+ LOG  stopNotification_Chara error: writeDescriptor failed for descriptor: 00002902-0000-1000-8000-00805f9b34fb
+ LOG  stopNotification_Chara error: writeDescriptor failed for descriptor: 00002902-0000-1000-8000-00805f9b34fb
+ LOG  handleDisconnectedPeripheral: {"peripheral": "B0:C2:05:11:21:30", "status": 0}
