@@ -261,6 +261,34 @@ export default class BleModule {
     });
   }
 
+  stopNotification2() {
+    return new Promise((resolve, reject) => {
+      for (let i = 0; i < this.nofityServiceUUID.length; i++) {
+        setTimeout(async () => {
+          try {
+              BleManager.stopNotification(
+              this.peripheralId,
+              this.nofityServiceUUID[i],
+              this.nofityCharacteristicUUID[i],
+            )
+              .then(() => {
+                console.log('Notification stopped');
+               // resolve();
+              })
+              .catch(error => {
+                console.log('Notification error:', error);
+               // reject(error);
+              });
+          }
+          catch (err) {
+
+          }
+        }, i * 1000);
+      }
+    });
+  }
+
+
   /**
    * Turn off notifications
    * Stop the notification on the specified characteristic.
@@ -273,11 +301,11 @@ export default class BleModule {
     )
       .then(() => {
       //  console.log('stopNotification success!');
-        resolve();
+        //resolve();
       })
       .catch(error => {
         console.log('stopNotification error:', error);
-        reject(error);
+        //reject(error);
     });
   }
 
@@ -496,6 +524,26 @@ export default class BleModule {
               })
               .catch(error => {
                 console.log('write_writeChara error:', error);
+              });
+        }, i * 500);
+      }
+      });
+  }
+
+  write_notifyChara() {
+    return new Promise((resolve, reject) => {
+      for (let i = 0; i < this.notifyChara.length; i++) {
+        setTimeout(async () => {
+              BleManager.startNotification(
+              this.peripheralId,
+              this.notifyChara[i].service,
+              this.notifyChara[i].characteristic
+            )
+              .then(() => {
+                resolve();
+              })
+              .catch(error => {
+                console.log('write_notifyChara error:', error);
               });
         }, i * 500);
       }

@@ -324,11 +324,21 @@ class MainPage extends Component {
             switch (this.currentCommand) {
                 case BgmCommand.WAIT_NOTIFY:
                     const meterSN = this.hexStringToAscii(value.slice(1, value.length -1).toString('utf-8'));
+                    console.log('meterSN:', meterSN);
                     this.meterSN=meterSN;
                     this.currentCommand = BgmCommand.OPEN_PCL;
                   break;
 
                 case BgmCommand.OPEN_PCL:
+                    await this.BluetoothManager.stopNotification() // or await this.BluetoothManager.stopNotification()
+                        .then(() => {
+                            // setIsMonitoring(true);
+                            // alert('aaa');
+                        })
+                        .catch(err => {
+                            // setIsMonitoring(false);
+                            // alert('bbb');
+                        });
                     let checkPCL=await this.checkIfPCL_Is_Open();
                     if(checkPCL==true)
                     {
@@ -344,6 +354,7 @@ class MainPage extends Component {
                 case BgmCommand.GET_MODEL_NAME:
                     const modelName = this.hexStringToAscii(value.slice(4, value.length-1).toString('utf-8'));
                     this.modelName=modelName;
+                    console.log('modelName:', modelName);
                     let cmd_firmware_version=[0xB0, 0x01, 0xB1];
                     await this.BluetoothManager.write_writeChara(cmd_firmware_version)
                     .then(() => {
@@ -354,6 +365,7 @@ class MainPage extends Component {
                 case BgmCommand.GET_FIRMWARE_VERSION:
                   const firmwareVersion = this.hexStringToAscii(value.slice(4, value.length-1).toString('utf-8'));
                   this.firmwareVersion=firmwareVersion;
+                  console.log('firmwareVersion:', firmwareVersion);
                   let cmd_total_record_count=[0xB0, 0x33, 0xE3];
                     await this.BluetoothManager.write_writeChara(cmd_total_record_count)
                     .then(() => {
@@ -365,6 +377,7 @@ class MainPage extends Component {
                   let bytes = value.slice(4, value.length - 1);
                   let counts = this.getTotalCount(bytes.slice(4,6));
                   this.totalCount=counts;
+                  console.log('totalCount:', counts);
     
                     if (counts > 0) {
                         let cmd_get_one_record=this.getOneRecordCmd();

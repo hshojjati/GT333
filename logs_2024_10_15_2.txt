@@ -1,0 +1,46 @@
+ LOG  Init the module success.
+ LOG  Scan started
+ LOG  startNotification
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: WAIT_NOTIFY
+ LOG  meterSN: 2236XAA0295
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  data came in:  {"characteristic": "0000fee2-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  scanning: false
+ LOG  data came in:  {"characteristic": "0000fee5-0000-1000-8000-00805f9b34fb", "peripheral": "B0:C2:05:11:21:30", "service": "0000fee0-0000-1000-8000-00805f9b34fb", "value": [11, 50, 50, 51, 54, 88, 65, 65, 48, 50, 57, 53, 130]}
+ LOG  hexString of data: 0x0B 0x32 0x32 0x33 0x36 0x58 0x41 0x41 0x30 0x32 0x39 0x35 0x82
+ LOG  currentCommand: OPEN_PCL
+ LOG  stopNotification error: writeDescriptor failed for descriptor: 00002902-0000-1000-8000-00805f9b34fb
+ LOG  handleDisconnectedPeripheral: {"peripheral": "B0:C2:05:11:21:30", "status": 0}
