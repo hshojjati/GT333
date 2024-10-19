@@ -102,17 +102,9 @@ export default class BleModule {
   }
 
   initUUID() {
-    this.readServiceUUID = [];
-    this.readCharacteristicUUID = [];
-    this.writeWithResponseServiceUUID = [];
-    this.writeWithResponseCharacteristicUUID = [];
-    this.writeWithoutResponseServiceUUID = [];
-    this.writeWithoutResponseCharacteristicUUID = [];
-    this.nofityServiceUUID = [];
-    this.nofityCharacteristicUUID = [];
-    this.pclChara= [];
-    this.notifyChara= [];
-    this.writeChara= [];
+    this.pclChara;
+    this.notifyChara;
+    this.writeChara;
 
     this.BGM_UUID_FEE1 = '0000FEE1-0000-1000-8000-00805F9B34FB';
     this.BGM_UUID_FEE2 = '0000FEE2-0000-1000-8000-00805F9B34FB';
@@ -121,74 +113,24 @@ export default class BleModule {
 
   //acquisition Notify、Read、Write、WriteWithoutResponse of serviceUUID和characteristicUUID
   getUUID(peripheralInfo) {
-    this.readServiceUUID = [];
-    this.readCharacteristicUUID = [];
-    this.writeWithResponseServiceUUID = [];
-    this.writeWithResponseCharacteristicUUID = [];
-    this.writeWithoutResponseServiceUUID = [];
-    this.writeWithoutResponseCharacteristicUUID = [];
-    this.nofityServiceUUID = [];
-    this.nofityCharacteristicUUID = [];
-    this.pclChara= [];
-    this.notifyChara= [];
-    this.writeChara= [];
+    this.pclChara;
+    this.notifyChara;
+    this.writeChara;
     for (let item of peripheralInfo.characteristics) {
       item.service = this.fullUUID(item.service);
       item.characteristic = this.fullUUID(item.characteristic);
       if (Platform.OS == 'android') {
-        if (item.properties.Notify == 'Notify' || item.properties.Indicate =='Indicate') {
-          this.nofityServiceUUID.push(item.service);
-          this.nofityCharacteristicUUID.push(item.characteristic);
-        }
-        if (item.properties.Read == 'Read') {
-          this.readServiceUUID.push(item.service);
-          this.readCharacteristicUUID.push(item.characteristic);
-        }
-        if (item.properties.Write == 'Write') {
-          this.writeWithResponseServiceUUID.push(item.service);
-          this.writeWithResponseCharacteristicUUID.push(item.characteristic);
-        }
-        if (item.properties.WriteWithoutResponse == 'WriteWithoutResponse') {
-          this.writeWithoutResponseServiceUUID.push(item.service);
-          this.writeWithoutResponseCharacteristicUUID.push(item.characteristic);
-        }
-
         switch (item.characteristic) {
           case this.BGM_UUID_FEE1:
-              if(!this.pclChara.includes(item))
-                this.pclChara.push(item);
+                this.pclChara=item;
               break;
           case this.BGM_UUID_FEE2:
-            if(!this.notifyChara.includes(item))
-                this.notifyChara.push(item);
+                this.notifyChara=item;
               break;
           case this.BGM_UUID_FEE3:
-            if(!this.writeChara.includes(item))
-                this.writeChara.push(item);
+                this.writeChara=item;
               break;
       }
-      } else {
-        //ios
-        for (let property of item.properties) {
-          if (property == 'Notify') {
-            this.nofityServiceUUID.push(item.service);
-            this.nofityCharacteristicUUID.push(item.characteristic);
-          }
-          if (property == 'Read') {
-            this.readServiceUUID.push(item.service);
-            this.readCharacteristicUUID.push(item.characteristic);
-          }
-          if (property == 'Write') {
-            this.writeWithResponseServiceUUID.push(item.service);
-            this.writeWithResponseCharacteristicUUID.push(item.characteristic);
-          }
-          if (property == 'WriteWithoutResponse') {
-            this.writeWithoutResponseServiceUUID.push(item.service);
-            this.writeWithoutResponseCharacteristicUUID.push(
-              item.characteristic,
-            );
-          }
-        }
       }
     }
   }
@@ -205,6 +147,7 @@ export default class BleModule {
           return BleManager.retrieveServices(id);
         })
         .then(peripheralInfo => {
+          //console.log('peripheralInfo: ',peripheralInfo);
           this.peripheralId = peripheralInfo.id;
           this.getUUID(peripheralInfo);
           this.isConnecting = false; //The current Bluetooth connection ends
@@ -235,59 +178,16 @@ export default class BleModule {
    * Start the notification on the specified characteristic.
    * */
   startNotification() {
-    return new Promise((resolve, reject) => {
-      for (let i = 0; i < this.nofityServiceUUID.length; i++) {
-        setTimeout(async () => {
-          try {
-              BleManager.startNotification(
-              this.peripheralId,
-              this.nofityServiceUUID[i],
-              this.nofityCharacteristicUUID[i],
-            )
-              .then(() => {
-                console.log('Notification started');
-               // resolve();
-              })
-              .catch(error => {
-                console.log('Notification error:', error);
-               // reject(error);
-              });
-          }
-          catch (err) {
-
-          }
-        }, i * 1000);
-      }
-    });
+      console.log(`startNotification to service: ${this.notifyChara.service}, charuuid: ${this.notifyChara.characteristic}`);
+      BleManager.startNotification(
+        this.peripheralId,
+        this.notifyChara.service,
+        this.notifyChara.characteristic,
+      )
+      .catch(error => {
+        console.log('startNotification error:', error);
+      });
   }
-
-  stopNotification2() {
-    return new Promise((resolve, reject) => {
-      for (let i = 0; i < this.nofityServiceUUID.length; i++) {
-        setTimeout(async () => {
-          try {
-              BleManager.stopNotification(
-              this.peripheralId,
-              this.nofityServiceUUID[i],
-              this.nofityCharacteristicUUID[i],
-            )
-              .then(() => {
-                console.log('Notification stopped');
-               // resolve();
-              })
-              .catch(error => {
-                console.log('Notification error:', error);
-               // reject(error);
-              });
-          }
-          catch (err) {
-
-          }
-        }, i * 1000);
-      }
-    });
-  }
-
 
   /**
    * Turn off notifications
@@ -301,11 +201,11 @@ export default class BleModule {
     )
       .then(() => {
       //  console.log('stopNotification success!');
-        //resolve();
+        resolve();
       })
       .catch(error => {
         console.log('stopNotification error:', error);
-        //reject(error);
+        reject(error);
     });
   }
 
@@ -471,106 +371,42 @@ export default class BleModule {
 
   write_pclChara(cmd) {
     console.log('write_pclChara: ',cmd);
-    return new Promise((resolve, reject) => {
-      for (let i = 0; i < this.pclChara.length; i++) {
-        setTimeout(async () => {
-              BleManager.write(
-              this.peripheralId,
-              this.pclChara[i].service,
-              this.pclChara[i].characteristic,
-              cmd
-            )
-              .then(() => {
-                //setTimeout(() => this.readCharacteristic(this.state.pclChara), 1000)
-              })
-              .catch(error => {
-                console.log('write_pclChara error:', error);
-              });
-        }, i * 1000);
-      }
-      });
+    BleManager.write(
+    this.peripheralId,
+    this.pclChara.service,
+    this.pclChara.characteristic,
+    cmd
+  )
+    .catch(error => {
+      console.log('write_pclChara error:', error);
+    });
   }
 
   read_pclChara() {
     return new Promise((resolve, reject) => {
-      for (let i = 0; i < this.pclChara.length; i++) {
-        BleManager.read(
-          this.peripheralId,
-          this.pclChara[i].service,
-          this.pclChara[i].characteristic
+      BleManager.read(
+        this.peripheralId,
+        this.pclChara.service,
+        this.pclChara.characteristic
       )
       .then(data => {
         resolve(data);
       })
-        .catch(error => {
-          console.log('read_pclChara error:', error);
-        });
-      }
+      .catch(error => {
+        console.log('read_pclChara error:', error);
       });
+    });
   }
 
   write_writeChara(cmd) {
-    return new Promise((resolve, reject) => {
-      for (let i = 0; i < this.writeChara.length; i++) {
-        setTimeout(async () => {
-              BleManager.write(
-              this.peripheralId,
-              this.writeChara[i].service,
-              this.writeChara[i].characteristic,
-              cmd
-            )
-              .then(() => {
-                resolve();
-              })
-              .catch(error => {
-                console.log('write_writeChara error:', error);
-              });
-        }, i * 500);
-      }
-      });
-  }
-
-  startNotification_Chara() {
-    return new Promise((resolve, reject) => {
-      for (let i = 0; i < this.notifyChara.length; i++) {
-        setTimeout(async () => {
-              BleManager.startNotification(
-              this.peripheralId,
-              this.notifyChara[i].service,
-              this.notifyChara[i].characteristic
-            )
-              .then(() => {
-                console.log('notification started');
-                resolve();
-              })
-              .catch(error => {
-                console.log('startNotification_Chara error:', error);
-                reject(error);
-              });
-        }, i * 500);
-      }
-      });
-  }
-
-  stopNotification_Chara() {
-    return new Promise((resolve, reject) => {
-      for (let i = 0; i < this.notifyChara.length; i++) {
-        setTimeout(async () => {
-              BleManager.stopNotification(
-              this.peripheralId,
-              this.notifyChara[i].service,
-              this.notifyChara[i].characteristic
-            )
-              .then(() => {
-                console.log('notification stopped');
-                resolve();
-              })
-              .catch(error => {
-                console.log('stopNotification_Chara error:', error);
-                reject(error);
-              });
-        }, i * 500);
-      }
+      BleManager.write(
+      this.peripheralId,
+      this.writeChara.service,
+      this.writeChara.characteristic,
+      cmd
+    )
+      .catch(error => {
+        console.log('write_writeChara error:', error);
       });
   }
 }

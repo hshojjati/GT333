@@ -94,10 +94,12 @@ class MainPage extends Component {
         this.meterSN='';
         this.modelName='';
         this.firmwareVersion='';
-        this.totalCount=0;
         this.isOpenPCL=false;
         this.glucoseData = [];
+        this.isEnabledNotification = false;
+        this.totalCountLabel=0;
     }
+    
     goBack = () => {
         this.props.navigation.goBack();
       };
@@ -268,40 +270,81 @@ class MainPage extends Component {
         try {
 
             if (item.id != undefined && item.id.length > 0) {
-               // await this.BluetoothManager.createBond(item.id);
-
                 await this.BluetoothManager.connect(item.id)
                     .then(peripheralInfo => {
+                        console.log('connected to:', item.id);
                         this.setState({ connected: true, device: item });
-                        this.CloseCustomAlert()
+                        this.CloseCustomAlert();
+                        console.log("startNotification");
+                        this.updateValueListener = this.BluetoothManager.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleUpdateValue);
+                        setTimeout(() =>this.checkNotificationRunnable(), 3000);
                     })
                     .catch(_err => {
                         Alert.alert(_err)
                     });
-
-                console.log("startNotification");
-                if (this.updateValueListener != undefined)
-                    this.updateValueListener.remove();
-                this.updateValueListener = this.BluetoothManager.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleUpdateValue);
-                try {
-                    this.currentCommand = BgmCommand.WAIT_NOTIFY;
-                    await this.BluetoothManager.startNotification();
-                }
-                catch (error) {
-                    //  console.log(error);
-                }
             }
             else {
                 console.log('item.id: ');
             }
 
         } catch (e) {
-            console.log('Error: ' + e.message);
-            Alert.alert(e.message);
+            console.log('connect error: ' + e.message);
         }
     };
+
+    checkNotificationRunnable = () => {
+        console.log('checkNotificationRunnable called');
+        if (this.isEnabledNotification) {
+          return; // Exit if notifications are already enabled
+        }
+      
+        console.log("Retry Enable Notification.");
+        this.enableNotifications(); // Assuming enableNotifications is a function defined in your app
+        // Retry after 1 second (1000 milliseconds)
+        //setTimeout(this.checkNotificationRunnable(), 1000);
+      };
+
+      enableNotifications = () =>{
+        console.log('Enable Notifications');
+        this.currentCommand = BgmCommand.WAIT_NOTIFY;
+        this.BluetoothManager.startNotification();
+      };
+
+      checkPCLRunnable = async () => {
+        if (this.isOpenPCL) {
+          return; // Exit if PCL is already open
+        }
+      
+        console.log("Read PCL.");
+      
+        // Read characteristic for PCL (replace with the correct service and characteristic UUIDs)
+        await this.BluetoothManager.read_pclChara()
+        .then(data => {
+            console.log('read_pclChara data:', data);
+            if (this.currentCommand === BgmCommand.OPEN_PCL) {
+                if (data.length > 0 && data[0] === 0x00) {
+                  console.log("PCL Opened.");
+                  isOpenPCL = true;
+                  this.currentCommand = BgmCommand.GET_MODEL_NAME;
+                  const writeData = [0xB0, 0x00, 0xB0];
+                  setTimeout(() =>this.BluetoothManager.write_writeChara(writeData), 500);
+                } else {
+                  console.log("Retry Open PCL.");
+                  this.currentCommand = BgmCommand.OPEN_PCL;
+                  const retryData = [0x00];
+                  this.BluetoothManager.write_pclChara(retryData);
+                  setTimeout(() =>this.checkPCLRunnable(), 1000);
+                }
+              }
+        })
+        .catch(_err => {
+            console.log('checkPCLRunnable.read_pclChara error: ',_err)
+        });
+      };
+
       //==================================================================================================
     handleUpdateValue = async data => {
+        try{
             if (!data.value) {
                 console.error("Characteristic value is undefined");
                 return null;
@@ -314,78 +357,62 @@ class MainPage extends Component {
     
             switch (this.currentCommand) {
                 case BgmCommand.WAIT_NOTIFY:
+                    this.isEnabledNotification = true
                     const meterSN = this.hexStringToAscii(value.slice(1, value.length -1).toString('utf-8'));
-                    console.log('meterSN:', meterSN);
                     this.meterSN=meterSN;
+                    console.log('meterSN: ', meterSN)
                     this.currentCommand = BgmCommand.OPEN_PCL;
+                    let cmd_open_pcl= [0x00];
+                    this.BluetoothManager.write_pclChara(cmd_open_pcl);
+                    setTimeout(() => this.checkPCLRunnable(), 1000);
                   break;
 
-                case BgmCommand.OPEN_PCL:
-                    
-                        
-                    let checkPCL=await this.checkIfPCL_Is_Open();
-                    if(checkPCL==true)
-                    {
-                        console.log('PCL Opened.');
-                        let cmd_ModelName=[0xB0, 0x00, 0xB0];
-                        await this.BluetoothManager.write_writeChara(cmd_ModelName)
-                        .then(() => {
-                            this.currentCommand = BgmCommand.GET_MODEL_NAME;
-                            });
-                    }
-                break;
-    
                 case BgmCommand.GET_MODEL_NAME:
                     const modelName = this.hexStringToAscii(value.slice(4, value.length-1).toString('utf-8'));
                     this.modelName=modelName;
-                    console.log('modelName:', modelName);
+                    console.log('modelName: ',modelName);
+                    this.currentCommand = BgmCommand.GET_FIRMWARE_VERSION;
                     let cmd_firmware_version=[0xB0, 0x01, 0xB1];
-                    await this.BluetoothManager.write_writeChara(cmd_firmware_version)
-                    .then(() => {
-                        this.currentCommand = BgmCommand.GET_FIRMWARE_VERSION;
-                        });
+                    setTimeout(() =>this.BluetoothManager.write_writeChara(cmd_firmware_version),500);
                   break;
     
                 case BgmCommand.GET_FIRMWARE_VERSION:
                   const firmwareVersion = this.hexStringToAscii(value.slice(4, value.length-1).toString('utf-8'));
                   this.firmwareVersion=firmwareVersion;
-                  console.log('firmwareVersion:', firmwareVersion);
+                  console.log('firmwareVersion: ',firmwareVersion);
+                  this.currentCommand = BgmCommand.GET_TOTAL_RECORD_COUNT;
                   let cmd_total_record_count=[0xB0, 0x33, 0xE3];
-                    await this.BluetoothManager.write_writeChara(cmd_total_record_count)
-                    .then(() => {
-                        this.currentCommand =  BgmCommand.GET_TOTAL_RECORD_COUNT;
-                        });
+                  setTimeout(() =>this.BluetoothManager.write_writeChara(cmd_total_record_count),500);
                 break;
     
                 case BgmCommand.GET_TOTAL_RECORD_COUNT:
-                  let bytes = value.slice(4, value.length - 1);
-                  let counts = this.getTotalCount(bytes.slice(4,6));
-                  this.totalCount=counts;
-                  console.log('totalCount:', counts);
-    
-                    if (counts > 0) {
-                        await this.BluetoothManager.stopNotification_Chara();
-                        let cmd_get_one_record=this.getOneRecordCmd();
-                        await this.BluetoothManager.write_writeChara(cmd_get_one_record)
-                        .then(() => {
+                        let bytes = data.value.slice(4, data.value.length - 1);
+                        let slicedBytes=bytes.slice(4,6);
+                        let counts = this.getTotalCount(slicedBytes);
+                        this.totalCount=counts;
+                        this.totalCountLabel=counts;
+                        console.log('totalCount: ', counts);
+          
+                        if (counts > 0) {
                             this.currentCommand = BgmCommand.GET_GLUCOSE_RECORD;
-                        });
-                    } else {
-                        console.log('disconnecting')
-                        this.disconnect(data.peripheral);
-                    }
+                            let cmd_get_one_record=this.getOneRecordCmd();
+                            setTimeout(() =>this.BluetoothManager.write_writeChara(cmd_get_one_record),500);
+                        } else {
+                            console.log('no data, disconnecting')
+                            this.BluetoothManager.disconnect();
+                        }
                   break;
     
                 case BgmCommand.GET_GLUCOSE_RECORD:
                     try{
-                        const tempBytes = value.slice(2, value.length-1);
+                        const tempBytes = data.value.slice(2, data.value.length-1);
                         this.glucoseData = this.glucoseData.concat(tempBytes);
           
-                        if (value[0] !== value[1]) {
-                              console.log('returning xxx');
+                        if (data.value[0] !== data.value[1]) {
                               return;
                         }
-          
+                        
+                        console.log('parsing data')
                         // Process the glucose data
                         this.parserOneRecord(this.glucoseData.slice(2, this.glucoseData.length-1))
           
@@ -393,46 +420,28 @@ class MainPage extends Component {
                         this.totalCount -= 1;
           
                         if (this.totalCount === 0) {
-                          let cmd_stop_broadcast=[0xB0, 0x36, 0x78, 0x5E];
-                                  await this.BluetoothManager.write_writeChara(cmd_stop_broadcast)
-                                  .then(() => {
-                                      this.currentCommand = BgmCommand.STOP_BROADCAST;
-                                      });
+                            this.currentCommand = BgmCommand.STOP_BROADCAST;
+                            console.log('stopping broadcast')
+                            let cmd_stop_broadcast=[0xB0, 0x36, 0x78, 0x5E];
+                            setTimeout(() => this.BluetoothManager.write_writeChara(cmd_stop_broadcast), 500);
                         } else {
                           let cmd_get_one_record=this.getOneRecordCmd();
-                          await this.BluetoothManager.write_writeChara(cmd_get_one_record);
+                          setTimeout(() =>this.BluetoothManager.write_writeChara(cmd_get_one_record), 500);
                         }
                     }
                     catch(err){
                         console.log('err:',err);
                     }
                   break;
-    
-                default:
-                    console.log('disconnecting');
-                    this.disconnect(data.peripheral);
+
+                  default:
+                    console.log('disconnecting')
+                    this.BluetoothManager.disconnect();
                   break;
               }
-    }
-
-    async checkIfPCL_Is_Open(){
-        let cmd_open_pcl= [0x00];
-        this.BluetoothManager.write_pclChara(cmd_open_pcl);
-        let result=await this.BluetoothManager.read_pclChara();
-        const firstValue = result ? result[0] : 0x01;
-        if (firstValue === 0x00){
-            return true;
         }
-        else
-        {
-            console.log(`retry PCL Opening for ${this.open_pcl_try_counter} time`);
-            this.open_pcl_try_counter=this.open_pcl_try_counter+1;
-            if(this.open_pcl_try_counter<=10)
-                return await checkIfPCL_Is_Open();
-            else{
-                console.log('cannot open pcl');
-                return false;
-            }
+        catch(err){
+            console.log('handleUpdateValue error:',err)
         }
     }
 
@@ -442,6 +451,23 @@ class MainPage extends Component {
           return '0x' + ('0' + (byte & 0xFF).toString(16)).slice(-2).toUpperCase();
         }).join(' ');
     }
+
+    byteArrayToHexNumberArray(byteArray) {
+        return byteArray.map(byte => {
+          return (byte & 0xFF);
+        });
+      }
+
+      byteArrayToHexStringArray(byteArray) {
+        return byteArray.map(byte => {
+          // Convert each byte to a hex string and pad with leading zeros if necessary
+          return '0x' + ('0' + (byte & 0xFF).toString(16)).slice(-2);
+        });
+      }
+
+      convertHexArrayToRawNumbers(hexArray) {
+        return hexArray.map(hexString => parseInt(hexString, 16));
+      }
 
     hexStringToAscii(hexString) {
         // Remove any "0x" prefixes and split the string into an array of hex values
@@ -466,30 +492,42 @@ class MainPage extends Component {
     }
 
     getOneRecordCmd() {
-        // Create the byte array (in JavaScript, this is just a regular array)
-        const cmd = [0xB0, 0x61, 0x00, 0x00, 0x00];
+        try{
+            // Create the byte array (in JavaScript, this is just a regular array)
+            const cmd = [0xB0, 0x61, 0x00, 0x00, 0x00];
 
-        // Assume totalCount is defined elsewhere
-        cmd[2] = this.totalCount & 0xFF;          // Equivalent of totalCount.toUByte().and(0xFF.toUByte())
-        cmd[3] = (this.totalCount >> 8) & 0xFF;   // Equivalent of totalCount.toUInt().shr(8)
+            // Assume totalCount is defined elsewhere
+            cmd[2] = this.totalCount & 0xFF;          // Equivalent of totalCount.toUByte().and(0xFF.toUByte())
+            cmd[3] = (this.totalCount >> 8) & 0xFF;   // Equivalent of totalCount.toUInt().shr(8)
 
-        // Calculate checksum and store it in cmd[4]
-        cmd[4] = (cmd[0] + cmd[1] + cmd[2] + cmd[3]) & 0xFF; // Calculate checksum
-
-        // Return the array (which can be used for BLE commands)
-        return cmd;
-      }
-
-      getTotalCount(bytes) {
-        let total = 0;
-
-        // Iterate through the bytes array
-        for (let i = 0; i < bytes.length; i++) {
-          total += (bytes[i] & 0xFF) << (8 * i);
+            // Calculate checksum and store it in cmd[4]
+            cmd[4] = (cmd[0] + cmd[1] + cmd[2] + cmd[3]) & 0xFF; // Calculate checksum
+            let newcmd=this.byteArrayToHexStringArray(cmd);
+            let converted=this.convertHexArrayToRawNumbers(newcmd);
+            return converted;
         }
-
-        return total;
+        catch(err){
+            console.log('getOneRecordCmd error:',err);
+        }
+        return null;
       }
+
+      getTotalCount = (bytes) => {
+        try {
+          console.log('getTotalCount started for bytes:', bytes);
+          let total = 0;
+      
+          // Iterate through the bytes array
+          for (let i = 0; i < bytes.length; i++) {
+            total += (bytes[i] & 0xFF) << (8 * i);
+          }
+      
+          return total;
+        } catch (err) {
+          console.log('getTotalCount error:', err);
+          return 0;
+        }
+      };
 
     parserOneRecord = (data) => {
         console.log(`parsing data: ${data}`);
@@ -570,23 +608,6 @@ class MainPage extends Component {
 
         return `${year}-${month}-${day} ${hour}:${minute}`;
       };
-    //==================================================================================================
-    disconnect = async item => {
-        try {
-            if (item.id) {
-                this.BluetoothManager.disconnect();
-                item.connected = 'false';
-            }
-            else {
-                const disonnected = await item.disconnect();
-                if (disonnected) {
-                    item.connected = 'false';
-                }
-            }
-        } catch (e) {
-            console.log('Error: ' + e.message);
-        }
-    };
     //==================================================================================================
     async itemClick(item) {
         await this.connect(item);
@@ -776,7 +797,7 @@ class MainPage extends Component {
                            <Text style={styles.chartName}>meterSN:{this.meterSN} | </Text>
                            <Text style={styles.chartName}>modelName:{this.modelName} | </Text>
                            <Text style={styles.chartName}>firmwareVersion:{this.firmwareVersion} | </Text>
-                           <Text style={styles.chartName}>totalCount:{this.totalCount}</Text>
+                           <Text style={styles.chartName}>totalCount:{this.totalCountLabel}</Text>
                                 </View>
                                 <View style={styles.CaptureButton}>
                                 <TouchableOpacity style={styles.buttonContainer}
